@@ -1,0 +1,29 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Gradle
+.gradle/
+build/
+kotlin-js-store/
+
+# Kotlin
+*.class
+*.hprof
+*.pyc
+
+# System
+.DS_Store
+Thumbs.db
+
+# Secrets & Environment (Security!)
+.env
+*.env
+secret.properties
+local.properties
+
+# Logs
+*.log
