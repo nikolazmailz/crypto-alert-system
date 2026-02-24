@@ -1,16 +1,16 @@
-
 ## Git & Commits
 Мы используем Conventional Commits. Это позволяет автоматически генерировать Changelog.\
 Формат: <type>(<task>): <subject> \
 Типы:
 * feature: новая функциональность
-* fix: исправление бага
+* bugfix: исправление бага
+* hotfix: исправление бага в продакшене
 * chore: настройка сборки, обновление зависимостей (нет изменений в прод коде)
 * docs: изменения в документации
 * refactor: изменение кода без изменения поведения
 * test: добавление тестов
 
-### Работа с ветками:
+## Работа с ветками:
 main (или master):
 * Священная корова.
 * Здесь лежит только Production-ready код.
@@ -35,7 +35,7 @@ release/... (Временные ветки):
 hotfix/...:
 * Если продакшн упал. Ответвляются от main.
 
-### Workflow:
+## Workflow:
 
 1.  **Sync:** Перед созданием ветки обнови `develop` (`git pull origin develop`).
 2.  **Branch:** Создай ветку `feature/...`.
@@ -89,3 +89,56 @@ Squash через git:
 * Что произойдет: Git отменит все коммиты, но сами изменения кода останутся в рабочей директории (они уже добавлены в git add).
 * git commit -m "feat(task): implement new feature"
 * git push --force-with-lease
+
+## Релизный цикл (Release Branch)
+Подготовка к выкатке новой версии.
+**Алгоритм действий:**
+1.  **Start:** Создаем ветку `release/v1.1.0` от `develop`.
+  * С этого момента `develop` открыт для фич версии v1.2.0.
+  * В `release/v1.1.0` новые фичи лить **ЗАПРЕЩЕНО**.
+
+2.  **Bugfix Loop (Цикл исправлений):**
+  * Если QA находит баг, фикс делается в ветке `release/v1.1.0`.
+  * **ВАЖНО:** Любой фикс из релиза должен попасть в `develop`.
+  * *Предпочтительный метод:* Сразу после мерджа фикса в релиз, делаем `git checkout develop && git merge --no-ff release/v1.1.0`. Решаем конфликты сразу.
+
+3.  **Finish:**
+  * Слияние в `main` (с тегом).
+```bash
+        git checkout main
+        git merge --no-ff release/v1.1.0
+        git tag -a v1.1.0 -m "Release v1.1.0"
+        git push origin main --tags
+```
+  * Финальное слияние в `develop` (чтобы убедиться, что последние правки версии 1.1.0 доехали до будущей версии).
+```bash
+        git checkout develop
+        git merge --no-ff release/v1.1.0
+        git push origin develop
+```
+  * Удаление релизной ветки.
+
+### Хотфиксы (Hotfix Workflow)
+Экстренное исправление критического бага на продакшене.
+**Алгоритм действий:**
+1.  **Создание ветки:**
+    `git checkout main`
+    `git checkout -b hotfix/v1.1.1-fix-critical-npe`
+2.  **Fix:** Исправление бага + добавление теста, который воспроизводит баг.
+    * Бамп версии (Patch version: 1.1.0 -> 1.1.1).
+3.  **Verify:** Локальный прогон тестов.
+4.  **Merge:**
+  * В `main`:
+      ```bash
+      git checkout main
+      git merge --no-ff hotfix/v1.1.1-fix-critical-npe
+      git tag -a v1.1.1 -m "Hotfix v1.1.1"
+      git push origin main --tags
+      ```
+  * В `develop`:
+      ```bash
+      git checkout develop
+      git merge --no-ff hotfix/v1.1.1-fix-critical-npe
+      git push origin develop
+      ```
+5.  **Удаление ветки:** `git branch -d hotfix/v1.1.1...`
