@@ -1,4 +1,4 @@
-# [ADR-003] Clean Architecture (Hexagonal)
+# [ADR-004] Clean Architecture (Hexagonal)
 
 **Status:** Accepted
 **Date:** 2024-02-18

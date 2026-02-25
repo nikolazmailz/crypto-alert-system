@@ -68,11 +68,36 @@ class CryptoService(
 )
 ```
 
-### 3.2. Data Classes & DTO // todo
-?? Для JPA/R2DBC сущностей используем обычные class (из-за особенностей проксирования Spring/Hibernate, хотя в R2DBC это мягче, сохраняем стандарт). \
-(что дает data class ??) Для передачи данных (API, Service layer) используем data class.
+### 3.2. Работа с БД (DatabaseClient & jsonb)
+Мы отказались от ORM и Spring Data R2DBC репозиториев (`CoroutineCrudRepository`). Вся работа с базой данных ведется строго через `DatabaseClient`.
+* ✅ **Чтение данных (SELECT):** Используем возможности PostgreSQL по сборке JSON на стороне БД (`jsonb_build_object`, `jsonb_agg`). Это позволяет избежать проблемы N+1 и быстро мапить сложные агрегаты в Kotlin `data class` через Jackson `ObjectMapper`.
+* ✅ **Запись данных (INSERT/UPDATE):** Пишем нативный SQL. Для обработки null-значений будет использоваться расширение (`DatabaseClientExtensions` `org.springframework.r2dbc.core.bind`) для DatabaseClient.
+* ❌ **Запрещено** доставать данные плоскими таблицами и собирать из них иерархию объектов средствами Kotlin (через циклы и группировки в памяти).
 
-### 3.3. Controller & Service
+### 3.3. Миграции БД (Liquibase)
+Мы используем Liquibase строго в формате **Formatted SQL** для управления схемой базы данных. Запрещено использовать XML, YAML или JSON форматы для написания миграций. \
+✅ **Расположение и регистрация:** Все новые скрипты кладутся в папку `src/main/resources/db/changelog/changesets/`. Они автоматически подхватываются мастер-файлом, поэтому вручную регистрировать их в `db.changelog-master.yaml` не нужно. \
+✅ **Именование файлов:** Используем строгий префикс с порядковым номером из трех цифр (например, `001-init-schema.sql`, `002-add-status-column.sql`). \
+✅ **Оформление скрипта:** Каждый SQL-файл миграции обязан соответствовать следующим правилам:
+1. Начинаться со строки `-- liquibase formatted sql`.
+2. Содержать метаданные чейнджсета: `-- changeset <имя_разработчика>:<уникальный_id>`.
+3. Может содержать не обязательный блок отката: `-- rollback <sql_скрипт_отката>;`.
+
+**Пример правильной миграции:**
+```sql
+-- liquibase formatted sql
+
+-- changeset tech-lead:1
+CREATE TABLE crypto_prices (
+    symbol VARCHAR(20) PRIMARY KEY,
+    price DECIMAL(18, 8) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL
+);
+
+-- rollback DROP TABLE crypto_prices;
+```
+
+### 3.4. Controller & Service
 Контроллеры должны быть тонкими. Никакой бизнес-логики, только валидация запроса и вызов сервиса. \
 Вся бизнес-логика в @Service или Domain Model.
 
