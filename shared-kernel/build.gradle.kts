@@ -5,9 +5,14 @@ plugins {
 }
 
 dependencies {
-    // R2DBC (api значит, что другие модули тоже получат эти зависимости)
+    // R2DBC
     api(libs.spring.boot.starter.data.r2dbc)
     runtimeOnly(libs.postgresql.r2dbc)
+
+    // Миграции БД (Liquibase работает через JDBC)
+    api(libs.spring.boot.starter.jdbc)
+    api(libs.liquibase.core)
+    runtimeOnly(libs.postgresql.jdbc) // <-- Добавили классический драйвер!
 
     // Kotlin Coroutines
     api(libs.kotlinx.coroutines.reactor)

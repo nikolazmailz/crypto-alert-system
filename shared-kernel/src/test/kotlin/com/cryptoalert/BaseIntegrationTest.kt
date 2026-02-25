@@ -33,6 +33,11 @@ abstract class BaseIntegrationTest : ShouldSpec() {
             registry.add("spring.r2dbc.url") { r2dbcUrl }
             registry.add("spring.r2dbc.username", postgres::getUsername)
             registry.add("spring.r2dbc.password", postgres::getPassword)
+
+            // Блокирующий URL для миграций Liquibase (JDBC)
+            registry.add("spring.liquibase.url", postgres::getJdbcUrl)
+            registry.add("spring.liquibase.user", postgres::getUsername)
+            registry.add("spring.liquibase.password", postgres::getPassword)
         }
     }
 }
