@@ -1,4 +1,4 @@
-# ADR 004: Использование подхода API-First (OpenAPI Generation)
+# [ADR 005] Использование подхода API-First (OpenAPI Generation)
 
 **Статус:** Принято
 **Дата:** 24 февраля 2026 г.

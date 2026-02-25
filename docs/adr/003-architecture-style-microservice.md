@@ -1,4 +1,4 @@
-# [ADR-002] Microservices Architecture
+# [ADR-003] Microservices Architecture
 
 **Status:** Accepted
 **Date:** 2024-02-18

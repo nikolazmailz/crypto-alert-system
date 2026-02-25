@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.detekt)
 }
 
+val targetJavaVersion = libs.versions.java.get()
+
 subprojects {
     // Применяем плагины
     apply(plugin = "org.jetbrains.kotlin.jvm")
@@ -25,7 +27,7 @@ subprojects {
     // ИСПРАВЛЕНИЕ ЗДЕСЬ: Используем configure<JavaPluginExtension> вместо java {}
     configure<JavaPluginExtension> {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(libs.versions.java.get()))
+            languageVersion.set(JavaLanguageVersion.of(targetJavaVersion))
         }
     }
 
@@ -33,7 +35,7 @@ subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs += "-Xjsr305=strict"
-            jvmTarget = libs.versions.java.get()
+            jvmTarget = targetJavaVersion
         }
     }
 
