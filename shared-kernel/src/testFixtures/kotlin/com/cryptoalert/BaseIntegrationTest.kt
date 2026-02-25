@@ -15,6 +15,12 @@ abstract class BaseIntegrationTest : ShouldSpec() {
     override fun extensions() = listOf(SpringExtension)
 
     companion object {
+        init {
+            // Говорим Liquibase игнорировать дубли файлов в classpath
+            // (возникает в многомодульных проектах Gradle из-за jar + resources)
+            System.setProperty("liquibase.duplicateFileMode", "WARN")
+        }
+
         // Контейнер стартует один раз при загрузке класса в JVM
         private val postgres = PostgreSQLContainer<Nothing>("postgres:16-alpine").apply {
             withDatabaseName("crypto_alert_test")

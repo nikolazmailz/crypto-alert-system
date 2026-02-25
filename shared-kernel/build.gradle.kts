@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.dependency.management)
     alias(libs.plugins.kotlin.spring)
+
+    id("java-test-fixtures")
 }
 
 dependencies {
@@ -18,11 +20,11 @@ dependencies {
     api(libs.kotlinx.coroutines.reactor)
 
     // Test dependencies
-    testImplementation(libs.spring.boot.starter.test)
-    testImplementation(libs.testcontainers.postgresql)
-    testImplementation(libs.kotest.runner.junit5)
-    testImplementation(libs.kotest.assertions.core)
-    testImplementation(libs.kotest.extensions.spring)
+    testFixturesApi(libs.spring.boot.starter.test)
+    testFixturesApi(libs.testcontainers.postgresql)
+    testFixturesApi(libs.kotest.runner.junit5)
+    testFixturesApi(libs.kotest.assertions.core)
+    testFixturesApi(libs.kotest.extensions.spring)
     testImplementation(libs.kotlinx.coroutines.test)
 }
 

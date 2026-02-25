@@ -14,10 +14,14 @@ dependencies {
     // Spring WebFlux (для реактивных контроллеров)
     implementation(libs.spring.boot.starter.webflux)
 
+    implementation("org.postgresql:r2dbc-postgresql")
+
     // Зависимости для сгенерированного кода (Аннотации Swagger и Валидация)
     implementation(libs.swagger.annotations)
     implementation(libs.jakarta.validation)
 
+    // ДОБАВЛЯЕМ подключение тестовых фикстур из ядра для наших тестов
+    testImplementation(testFixtures(project(":shared-kernel")))
     // Тестирование
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.kotest.runner.junit5)
