@@ -1,0 +1,52 @@
+openapi: 3.0.3
+info:
+  title: Market Data API
+  description: API для получения котировок криптовалют
+  version: 1.0.0
+servers:
+  - url: /api/v1/market-data
+
+paths:
+  /prices/{symbol}:
+    get:
+      summary: Получить текущую цену
+      operationId: getPriceBySymbol
+      tags:
+        - Prices
+      parameters:
+        - name: symbol
+          in: path
+          required: true
+          description: Торговая пара (например, BTCUSDT)
+          schema:
+            type: string
+            example: "BTCUSDT"
+      responses:
+        '200':
+          description: Успешный ответ с ценой
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceResponse'
+        '404':
+          description: Валютная пара не найдена
+
+components:
+  schemas:
+    PriceResponse:
+      type: object
+      required:
+        - symbol
+        - price
+        - updatedAt
+      properties:
+        symbol:
+          type: string
+          example: "BTCUSDT"
+        price:
+          type: number
+          format: double
+          example: 50230.45
+        updatedAt:
+          type: string
+          format: date-time
