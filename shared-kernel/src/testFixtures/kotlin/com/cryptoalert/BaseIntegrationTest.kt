@@ -1,5 +1,7 @@
 package com.cryptoalert
 
+import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.extensions.spring.SpringExtension
 import org.springframework.boot.test.context.SpringBootTest
@@ -21,12 +23,17 @@ abstract class BaseIntegrationTest : ShouldSpec() {
             System.setProperty("liquibase.duplicateFileMode", "WARN")
         }
 
+        // 1. Поднимаем WireMock на случайном порту
+        val wireMockServer = WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort()).apply {
+            start()
+        }
+
         // Контейнер стартует один раз при загрузке класса в JVM
         private val postgres = PostgreSQLContainer<Nothing>("postgres:16-alpine").apply {
             withDatabaseName("crypto_alert_test")
             withUsername("test")
             withPassword("test")
-            withReuse(true) // Позволяет не перезапускать БД при локальной разработке
+//            withReuse(true) // Позволяет не перезапускать БД при локальной разработке
             start()
         }
 
@@ -44,6 +51,8 @@ abstract class BaseIntegrationTest : ShouldSpec() {
             registry.add("spring.liquibase.url", postgres::getJdbcUrl)
             registry.add("spring.liquibase.user", postgres::getUsername)
             registry.add("spring.liquibase.password", postgres::getPassword)
+
+            registry.add("binance.api.url") { wireMockServer.baseUrl() }
         }
     }
 }

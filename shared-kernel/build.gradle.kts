@@ -25,6 +25,8 @@ dependencies {
     testFixturesApi(libs.kotest.runner.junit5)
     testFixturesApi(libs.kotest.assertions.core)
     testFixturesApi(libs.kotest.extensions.spring)
+    testFixturesApi(libs.wiremock)
+
     testImplementation(libs.kotlinx.coroutines.test)
 }
 
