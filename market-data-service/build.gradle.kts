@@ -16,6 +16,8 @@ dependencies {
 
     implementation("org.postgresql:r2dbc-postgresql")
 
+    implementation(libs.oshai.kotlin.logging)
+
     // Зависимости для сгенерированного кода (Аннотации Swagger и Валидация)
     implementation(libs.swagger.annotations)
     implementation(libs.jakarta.validation)

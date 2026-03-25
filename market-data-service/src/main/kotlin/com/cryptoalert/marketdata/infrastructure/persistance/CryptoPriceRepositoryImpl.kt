@@ -1,13 +1,13 @@
-package com.cryptoalert.marketdata.infrastructure
+package com.cryptoalert.marketdata.infrastructure.persistance
 
 import com.cryptoalert.marketdata.domain.CryptoPrice
 import com.cryptoalert.marketdata.domain.CryptoPriceRepository
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.r2dbc.postgresql.codec.Json
 import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.stereotype.Repository
-import io.r2dbc.postgresql.codec.Json
-import kotlinx.coroutines.reactor.awaitSingleOrNull
 
 @Repository
 class CryptoPriceRepositoryImpl(

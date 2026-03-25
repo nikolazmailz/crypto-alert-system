@@ -86,8 +86,8 @@ class CryptoService(
 **Пример правильной миграции:**
 ```sql
 -- liquibase formatted sql
-
 -- changeset tech-lead:1
+
 CREATE TABLE crypto_prices (
     symbol VARCHAR(20) PRIMARY KEY,
     price DECIMAL(18, 8) NOT NULL,

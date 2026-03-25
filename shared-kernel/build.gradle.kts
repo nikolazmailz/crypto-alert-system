@@ -16,7 +16,13 @@ dependencies {
     api(libs.liquibase.core)
     runtimeOnly(libs.postgresql.jdbc) // <-- Добавили классический драйвер!
 
-    // Kotlin Coroutines
+    // Добавляем WebFlux в ядро (api, чтобы другие модули его наследовали)
+    api(libs.spring.boot.starter.webflux)
+
+    // logging
+    api(libs.oshai.kotlin.logging)
+
+    // Kotlin Coroutines (Мост между Project Reactor (Spring WebFlux/R2DBC) и Kotlin Coroutines)
     api(libs.kotlinx.coroutines.reactor)
 
     // Test dependencies
@@ -25,10 +31,20 @@ dependencies {
     testFixturesApi(libs.kotest.runner.junit5)
     testFixturesApi(libs.kotest.assertions.core)
     testFixturesApi(libs.kotest.extensions.spring)
+    testFixturesApi(libs.wiremock)
+
     testImplementation(libs.kotlinx.coroutines.test)
 }
 
 // Указываем Gradle использовать JUnit Platform для запуска Kotest
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    enabled = false // Отключаем создание исполняемого Spring Boot JAR
+}
+
+tasks.getByName<Jar>("jar") {
+    enabled = true // Включаем создание обычного JAR, который можно подключать как зависимость
 }
