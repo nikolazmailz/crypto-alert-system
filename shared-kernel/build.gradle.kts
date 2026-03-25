@@ -16,6 +16,12 @@ dependencies {
     api(libs.liquibase.core)
     runtimeOnly(libs.postgresql.jdbc) // <-- Добавили классический драйвер!
 
+    // Добавляем WebFlux в ядро (api, чтобы другие модули его наследовали)
+    api(libs.spring.boot.starter.webflux)
+
+    // logging
+    api(libs.oshai.kotlin.logging)
+
     // Kotlin Coroutines (Мост между Project Reactor (Spring WebFlux/R2DBC) и Kotlin Coroutines)
     api(libs.kotlinx.coroutines.reactor)
 
