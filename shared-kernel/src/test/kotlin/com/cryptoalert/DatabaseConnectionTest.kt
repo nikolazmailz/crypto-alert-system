@@ -1,9 +1,13 @@
 package com.cryptoalert
 
 import io.kotest.matchers.shouldBe
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.r2dbc.core.awaitOne
+import org.springframework.test.context.ActiveProfiles
 
+@SpringBootTest(classes = [TestApplication::class])
+@ActiveProfiles("test")
 class DatabaseConnectionTest(
     private val databaseClient: DatabaseClient // Kotest SpringExtension автоматически заинжектит бин
 ) : BaseIntegrationTest() {

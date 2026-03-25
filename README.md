@@ -24,3 +24,4 @@ docker-compose up -d
 
 # Запустить тесты
 ./gradlew test
+```

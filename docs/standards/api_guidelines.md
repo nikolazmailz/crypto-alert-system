@@ -116,3 +116,18 @@ class AlertController {
 * Метод GET для списков должен возвращать постраничный результат.
 * Используем query-параметры page (с 0) и size.
 * Пример: GET /api/v1/alerts?page=0&size=20&status=ACTIVE
+```json
+{
+  "content": [
+    {
+      "id": "1",
+      "currencyPair": "BTC_USDT",
+      "status": "ACTIVE"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "totalElements": 45,
+  "totalPages": 3
+}
+```

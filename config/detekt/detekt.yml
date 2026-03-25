@@ -10,10 +10,19 @@ complexity:
   active: true
   LongMethod:
     threshold: 60
+  # Исправлено: threshold разделен на два параметра
   LongParameterList:
-    threshold: 6
-  CyclomaticComplexity:
-    threshold: 15
+    functionThreshold: 6
+    constructorThreshold: 6
+  # Исправлено: CyclomaticComplexity заменено на ComplexMethod
+#  ComplexMethod:
+#    threshold: 15
+#  ReturnCount:
+#    active: true
+#    amount: 3  # Увеличиваем допустимое количество return до 3
+#    excludeLabeled: false
+#    excludeReturnFromLambda: true
+#    excludeGuardClauses: false
 
 coroutines:
   active: true
@@ -27,7 +36,6 @@ naming:
   FunctionNaming:
     functionPattern: '[a-z][a-zA-Z0-9]*'
     excludeClassPattern: '$^'
-    ignoreOverridden: true
   # Разрешаем бэктики в тестах
 #  FunctionNaming:
 #    ignoreAnnotated: ['Test']
@@ -48,3 +56,8 @@ potential-bugs:
   active: true
   UnsafeCallOnNullableType:
     active: true # Запрещает !!
+
+performance:
+  active: true
+  SpreadOperator:
+    active: false

@@ -1,21 +1,32 @@
 package com.cryptoalert.marketdata.application
 
-import com.cryptoalert.BaseIntegrationTest
+import com.cryptoalert.marketdata.MarketDataBaseIntegrationTest
 import com.cryptoalert.marketdata.domain.CryptoPrice
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
+import io.kotest.common.runBlocking
 import io.kotest.matchers.comparables.shouldBeEqualComparingTo
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.reactor.awaitSingle
+import org.springframework.r2dbc.core.DatabaseClient
 import java.math.BigDecimal
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 
 class MarketDataServiceIntegrationTest(
-    private val marketDataService: MarketDataService
-): BaseIntegrationTest() {
+    private val marketDataService: MarketDataService,
+    private val databaseClient: DatabaseClient,
+): MarketDataBaseIntegrationTest(databaseClient) {
     init {
+
+        beforeTest {
+            runBlocking {
+                deleteAllCryptoPrices()
+            }
+        }
+
         context("MarketDataService Integration") {
 
             should("save and retrieve price from database") {

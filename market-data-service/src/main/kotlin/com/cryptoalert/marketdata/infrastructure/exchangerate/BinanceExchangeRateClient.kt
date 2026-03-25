@@ -4,6 +4,7 @@ import com.cryptoalert.marketdata.domain.ExchangeRateProvider
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientException
 import org.springframework.web.reactive.function.client.awaitBodyOrNull
 import java.math.BigDecimal
 
@@ -22,7 +23,7 @@ class BinanceExchangeRateClient(
                 .awaitBodyOrNull<BinancePriceResponse>() // Корутиновая функция из WebFlux
 
             response?.price
-        } catch (e: Exception) {
+        } catch (e: WebClientException) {
             // В случае сетевой ошибки просто логируем и возвращаем null
             // (позже добавим CircuitBreaker/Retries)
             log.error { "Failed to fetch price for $symbol from Binance $e" }
