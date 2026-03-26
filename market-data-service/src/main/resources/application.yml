@@ -3,6 +3,53 @@ spring:
     problemdetails:
       enabled: true
 
+resilience4j:
+  circuitbreaker:
+    instances:
+      binanceClient:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: COUNT_BASED
+        minimumNumberOfCalls: 5
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+  retry:
+    instances:
+      binanceClient:
+        maxAttempts: 3
+        waitDuration: 500ms
+        retryExceptions:
+          - org.springframework.web.reactive.function.client.WebClientResponseException
+          - java.io.IOException
+
+#  circuitbreaker:
+#    configs:
+#      # Общий шаблон для всех внешних API
+#      default:
+#        slidingWindowSize: 10
+#        minimumNumberOfCalls: 5
+#        failureRateThreshold: 50
+#        waitDurationInOpenState: 10s
+#        registerHealthIndicator: true
+#    instances:
+#      # Конкретные экземпляры просто наследуют шаблон
+#      binanceClient:
+#        baseConfig: default
+#        # Можно переопределить любой параметр точечно
+#        waitDurationInOpenState: 20s
+
+#  retry:
+#    configs:
+#      default:
+#        maxAttempts: 3
+#        waitDuration: 500ms
+#    instances:
+#      binanceClient:
+#        baseConfig: default
+
+
 binance:
   api:
     url: "https://api.binance.com"

@@ -20,7 +20,12 @@ dependencies {
     // DB
     implementation(libs.postgresql.r2dbc)
 
+    // logging
     implementation(libs.oshai.kotlin.logging)
+
+    implementation(libs.resilience4j.spring.boot3)
+    implementation(libs.resilience4j.kotlin)
+    implementation(libs.resilience4j.reactor)
 
     // Зависимости для сгенерированного кода (Аннотации Swagger и Валидация)
     implementation(libs.swagger.annotations)
