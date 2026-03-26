@@ -10,6 +10,7 @@ swaggerAnnotations = "2.2.20"
 jakartaValidation = "3.0.2"
 
 oshai_kotlin_logging_version="5.1.0"
+openapi_version="2.3.0"
 
 kotest = "5.8.1"
 kotestSpring = "1.1.3"
@@ -36,8 +37,10 @@ liquibase-core = { module = "org.liquibase:liquibase-core" }
 # Добавляем JDBC драйвер (нужен только для Liquibase):
 postgresql-jdbc = { module = "org.postgresql:postgresql" }
 
-#logginh
+# logginh
 oshai-kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "oshai_kotlin_logging_version" }
+# openapi
+openapi = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version.ref = "openapi_version" }
 
 # Testing
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }

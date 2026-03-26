@@ -3,6 +3,7 @@ package com.cryptoalert.marketdata.application
 import com.cryptoalert.marketdata.domain.CryptoPrice
 import com.cryptoalert.marketdata.domain.CryptoPriceRepository
 import com.cryptoalert.marketdata.domain.ExchangeRateProvider
+import com.cryptoalert.shared.error.ResourceNotFoundException
 import org.springframework.stereotype.Service
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -44,7 +45,7 @@ class MarketDataService(
 //        return repository.save(newPrice)
 //    }
 
-    suspend fun getPrice(symbol: String): CryptoPrice? {
+    suspend fun getPrice(symbol: String): CryptoPrice {
         val normalizedSymbol = symbol.uppercase()
 
         // Пытаемся найти в БД, если нет — идем во внешний провайдер через элвис-оператор
@@ -57,6 +58,6 @@ class MarketDataService(
                     updatedAt = OffsetDateTime.now(ZoneOffset.UTC)
                 )
                 repository.save(newPrice)
-            }
+            } ?: throw ResourceNotFoundException("Crypto pair $symbol not found")
     }
 }

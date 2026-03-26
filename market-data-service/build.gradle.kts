@@ -14,7 +14,11 @@ dependencies {
     // Spring WebFlux (для реактивных контроллеров)
     implementation(libs.spring.boot.starter.webflux)
 
-    implementation("org.postgresql:r2dbc-postgresql")
+    // Swagger
+    implementation(libs.openapi)
+
+    // DB
+    implementation(libs.postgresql.r2dbc)
 
     implementation(libs.oshai.kotlin.logging)
 
