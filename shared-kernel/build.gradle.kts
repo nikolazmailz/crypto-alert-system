@@ -32,8 +32,10 @@ dependencies {
     testFixturesApi(libs.kotest.assertions.core)
     testFixturesApi(libs.kotest.extensions.spring)
     testFixturesApi(libs.wiremock)
+    testFixturesApi(libs.archunit)
 
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.archunit)
 }
 
 // Указываем Gradle использовать JUnit Platform для запуска Kotest

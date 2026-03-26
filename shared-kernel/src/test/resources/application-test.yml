@@ -1,3 +1,6 @@
 spring:
   liquibase:
     enabled: false # В самом ядре нам нечего мигрировать
+
+archRules:
+  allowEmptyLayers: true

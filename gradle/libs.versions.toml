@@ -19,6 +19,8 @@ testcontainers = "1.19.7"
 
 wiremock = "3.3.1"
 
+archunit_version = "1.4.1"
+
 [libraries]
 # coroutines
 kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor" }
@@ -56,6 +58,7 @@ kotest-extensions-spring = { module = "io.kotest.extensions:kotest-extensions-sp
 testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" }
 wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremock" }
+archunit = { module = "com.tngtech.archunit:archunit", version.ref = "archunit_version"}
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
