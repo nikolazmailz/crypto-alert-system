@@ -12,19 +12,6 @@ dependencies {
     implementation(kotlin("reflect"))
     implementation(project(":market-data-service"))
     implementation(project(":shared-kernel"))
-    implementation(libs.spring.boot.starter.webflux)
-    implementation(libs.spring.boot.starter.validation)
-    implementation(libs.openapi)
-
-    // DB
-    implementation(libs.postgresql.r2dbc)
-
-    // Resilience
-    implementation(libs.resilience4j.spring.boot3)
-    implementation(libs.resilience4j.kotlin)
-
-    // Swagger
-    implementation(libs.openapi)
 
     testImplementation(testFixtures(project(":shared-kernel")))
     testImplementation("com.ninja-squad:springmockk:4.0.2")

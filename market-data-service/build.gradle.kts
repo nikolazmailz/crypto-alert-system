@@ -12,26 +12,6 @@ dependencies {
     // Модуль зависит от общего ядра
     implementation(project(":shared-kernel"))
 
-    // Spring WebFlux (для реактивных контроллеров)
-    implementation(libs.spring.boot.starter.webflux)
-
-    // Swagger
-    implementation(libs.openapi)
-
-    // DB
-    implementation(libs.postgresql.r2dbc)
-
-    // logging
-    implementation(libs.oshai.kotlin.logging)
-
-    implementation(libs.resilience4j.spring.boot3)
-    implementation(libs.resilience4j.kotlin)
-    implementation(libs.resilience4j.reactor)
-
-    // Зависимости для сгенерированного кода (Аннотации Swagger и Валидация)
-    implementation(libs.swagger.annotations)
-    implementation(libs.jakarta.validation)
-
     // ДОБАВЛЯЕМ подключение тестовых фикстур из ядра для наших тестов
     testImplementation(testFixtures(project(":shared-kernel")))
     // Тестирование
