@@ -38,6 +38,9 @@ dependencies {
     // Swagger (OpenApi)
     api(libs.openapi)
 
+    // Caffeine
+    api(libs.caffeine)
+
     // Test dependencies
     testFixturesApi(libs.spring.boot.starter.test)
     testFixturesApi(libs.testcontainers.postgresql)

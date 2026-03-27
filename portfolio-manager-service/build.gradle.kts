@@ -13,6 +13,8 @@ dependencies {
     implementation(project(":market-data-service"))
     implementation(project(":shared-kernel"))
 
+    implementation(libs.postgresql.r2dbc)
+
     testImplementation(testFixtures(project(":shared-kernel")))
     testImplementation("com.ninja-squad:springmockk:4.0.2")
 }

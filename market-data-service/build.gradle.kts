@@ -12,6 +12,8 @@ dependencies {
     // Модуль зависит от общего ядра
     implementation(project(":shared-kernel"))
 
+    implementation(libs.postgresql.r2dbc)
+
     // ДОБАВЛЯЕМ подключение тестовых фикстур из ядра для наших тестов
     testImplementation(testFixtures(project(":shared-kernel")))
     // Тестирование

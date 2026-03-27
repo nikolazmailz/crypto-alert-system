@@ -10,8 +10,9 @@ swaggerAnnotations = "2.2.20"
 jakartaValidation = "3.0.2"
 resilience4j = "2.2.0"
 
-oshai_kotlin_logging_version="5.1.0"
-openapi_version="2.8.5"
+oshai_kotlin_logging_version = "5.1.0"
+openapi_version = "2.8.5"
+caffeine_version = "3.1.8"
 
 kotest = "5.8.1"
 kotestSpring = "1.1.3"
@@ -50,6 +51,8 @@ oshai-kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.
 # openapi
 openapi = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version.ref = "openapi_version" }
 swagger-annotations = { module = "io.swagger.core.v3:swagger-annotations", version.ref = "swaggerAnnotations" }
+# Caffeine
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine_version" }
 
 # Testing
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
@@ -59,7 +62,7 @@ kotest-extensions-spring = { module = "io.kotest.extensions:kotest-extensions-sp
 testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" }
 wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremock" }
-archunit = { module = "com.tngtech.archunit:archunit", version.ref = "archunit_version"}
+archunit = { module = "com.tngtech.archunit:archunit", version.ref = "archunit_version" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
