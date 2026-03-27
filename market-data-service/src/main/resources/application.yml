@@ -3,6 +3,21 @@ spring:
     problemdetails:
       enabled: true
 
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml # Путь к вашему главному файлу
+    enabled: true
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    url: ${spring.datasource.url}
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    # Указываем путь к вашему существующему файлу
+    url: /v3/api-docs
+  api-docs:
+    enabled: true
+
 resilience4j:
   circuitbreaker:
     instances:

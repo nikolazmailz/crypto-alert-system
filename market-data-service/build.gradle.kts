@@ -8,6 +8,7 @@ plugins {
 }
 
 dependencies {
+    implementation(kotlin("reflect"))
     // Модуль зависит от общего ядра
     implementation(project(":shared-kernel"))
 

@@ -11,7 +11,7 @@ jakartaValidation = "3.0.2"
 resilience4j = "2.2.0"
 
 oshai_kotlin_logging_version="5.1.0"
-openapi_version="2.3.0"
+openapi_version="2.8.5"
 
 kotest = "5.8.1"
 kotestSpring = "1.1.3"
