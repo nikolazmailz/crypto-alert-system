@@ -28,7 +28,7 @@ kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 # Spring
 spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
 spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
-swagger-annotations = { module = "io.swagger.core.v3:swagger-annotations", version.ref = "swaggerAnnotations" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
 jakarta-validation = { module = "jakarta.validation:jakarta.validation-api", version.ref = "jakartaValidation" }
 
 # База данных
@@ -49,6 +49,7 @@ resilience4j-reactor = { module = "io.github.resilience4j:resilience4j-reactor",
 oshai-kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "oshai_kotlin_logging_version" }
 # openapi
 openapi = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version.ref = "openapi_version" }
+swagger-annotations = { module = "io.swagger.core.v3:swagger-annotations", version.ref = "swaggerAnnotations" }
 
 # Testing
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }

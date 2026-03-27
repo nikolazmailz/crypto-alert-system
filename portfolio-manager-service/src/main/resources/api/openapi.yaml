@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: Portfolio Manager API
+  version: 1.0.0
+
+paths:
+  /api/v1/portfolios/{userId}/assets:
+    post:
+      tags:
+        - Portfolio
+      summary: Добавить актив в портфель
+      operationId: addAsset
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddAssetRequest'
+      responses:
+        '200': { description: Успешно }
+
+  /api/v1/portfolios/{userId}/total-value:
+    get:
+      tags:
+        - Portfolio
+      summary: Получить общую стоимость портфеля
+      operationId: getTotalValue
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Успешный расчет стоимости портфеля
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioValueResponse'
+
+components:
+  schemas:
+    AddAssetRequest:
+      type: object
+      required: [symbol, quantity]
+      properties:
+        symbol: { type: string, example: BTCUSDT }
+        quantity: { type: number, format: double, example: 0.5 }
+
+    PortfolioValueResponse:
+      type: object
+      required: [userId, totalValue]
+      properties:
+        userId: { type: string, format: uuid }
+        totalValue: { type: number, format: double }

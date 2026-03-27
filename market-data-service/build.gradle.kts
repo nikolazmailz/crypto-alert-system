@@ -45,7 +45,7 @@ dependencies {
 openApiGenerate {
     generatorName.set("kotlin-spring")
     inputSpec.set("$projectDir/src/main/resources/api/openapi.yaml")
-    outputDir.set("$buildDir/generated/openapi")
+    outputDir.set(layout.buildDirectory.dir("generated/openapi").map { it.asFile.absolutePath })
 
     apiPackage.set("com.cryptoalert.marketdata.api")
     modelPackage.set("com.cryptoalert.marketdata.dto")
@@ -63,7 +63,7 @@ openApiGenerate {
 // Добавляем сгенерированный код в source sets, чтобы IDE и компилятор его видели
 sourceSets {
     main {
-        kotlin.srcDir("$buildDir/generated/openapi/src/main/kotlin")
+        kotlin.srcDir(layout.buildDirectory.dir("generated/openapi/src/main/kotlin").map { it.asFile.absolutePath })
     }
 }
 

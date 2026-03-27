@@ -1,0 +1,18 @@
+spring:
+#  webflux:
+#    problemdetails:
+#      enabled: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml # Путь к вашему главному файлу
+    enabled: true
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    url: ${spring.datasource.url}
+
+#springdoc:
+#  swagger-ui:
+#    disable-swagger-default-url: true
+#    url: /v3/api-docs
+#  api-docs:
+#    enabled: true
