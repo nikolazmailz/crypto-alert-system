@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/crypto_alert
+    username: postgres
+    password: postgres
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/crypto_alert
+    username: postgres
+    password: postgres

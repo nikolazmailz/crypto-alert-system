@@ -8,19 +8,11 @@ plugins {
 }
 
 dependencies {
+    implementation(kotlin("reflect"))
     // Модуль зависит от общего ядра
     implementation(project(":shared-kernel"))
 
-    // Spring WebFlux (для реактивных контроллеров)
-    implementation(libs.spring.boot.starter.webflux)
-
-    implementation("org.postgresql:r2dbc-postgresql")
-
-    implementation(libs.oshai.kotlin.logging)
-
-    // Зависимости для сгенерированного кода (Аннотации Swagger и Валидация)
-    implementation(libs.swagger.annotations)
-    implementation(libs.jakarta.validation)
+    implementation(libs.postgresql.r2dbc)
 
     // ДОБАВЛЯЕМ подключение тестовых фикстур из ядра для наших тестов
     testImplementation(testFixtures(project(":shared-kernel")))
@@ -35,7 +27,7 @@ dependencies {
 openApiGenerate {
     generatorName.set("kotlin-spring")
     inputSpec.set("$projectDir/src/main/resources/api/openapi.yaml")
-    outputDir.set("$buildDir/generated/openapi")
+    outputDir.set(layout.buildDirectory.dir("generated/openapi").map { it.asFile.absolutePath })
 
     apiPackage.set("com.cryptoalert.marketdata.api")
     modelPackage.set("com.cryptoalert.marketdata.dto")
@@ -53,7 +45,7 @@ openApiGenerate {
 // Добавляем сгенерированный код в source sets, чтобы IDE и компилятор его видели
 sourceSets {
     main {
-        kotlin.srcDir("$buildDir/generated/openapi/src/main/kotlin")
+        kotlin.srcDir(layout.buildDirectory.dir("generated/openapi/src/main/kotlin").map { it.asFile.absolutePath })
     }
 }
 

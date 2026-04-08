@@ -18,12 +18,28 @@ dependencies {
 
     // Добавляем WebFlux в ядро (api, чтобы другие модули его наследовали)
     api(libs.spring.boot.starter.webflux)
+    api(libs.spring.boot.starter.validation)
+
+    // Зависимости для сгенерированного кода (Аннотации Swagger и Валидация)
+    api(libs.swagger.annotations)
+    api(libs.jakarta.validation)
 
     // logging
     api(libs.oshai.kotlin.logging)
 
     // Kotlin Coroutines (Мост между Project Reactor (Spring WebFlux/R2DBC) и Kotlin Coroutines)
     api(libs.kotlinx.coroutines.reactor)
+
+    // Resilience
+    api(libs.resilience4j.spring.boot3)
+    api(libs.resilience4j.kotlin)
+    api(libs.resilience4j.reactor)
+
+    // Swagger (OpenApi)
+    api(libs.openapi)
+
+    // Caffeine
+    api(libs.caffeine)
 
     // Test dependencies
     testFixturesApi(libs.spring.boot.starter.test)
@@ -32,8 +48,10 @@ dependencies {
     testFixturesApi(libs.kotest.assertions.core)
     testFixturesApi(libs.kotest.extensions.spring)
     testFixturesApi(libs.wiremock)
+    testFixturesApi(libs.archunit)
 
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.archunit)
 }
 
 // Указываем Gradle использовать JUnit Platform для запуска Kotest

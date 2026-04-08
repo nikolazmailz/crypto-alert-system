@@ -9,7 +9,6 @@ import io.kotest.common.runBlocking
 import io.kotest.matchers.comparables.shouldBeEqualComparingTo
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.r2dbc.core.DatabaseClient
 import java.math.BigDecimal
 import java.time.OffsetDateTime
