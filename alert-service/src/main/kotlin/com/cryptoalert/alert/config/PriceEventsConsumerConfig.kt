@@ -17,7 +17,7 @@ class PriceEventsConsumerConfig(
     private val log = KotlinLogging.logger {}
 
     @Bean
-    fun priceEvents(): (Flux<Message<PriceChangedEvent>>) -> Unit =
+    fun priceEventsConsumer(): (Flux<Message<PriceChangedEvent>>) -> Unit =
         { events ->
             events
                 .doOnNext { msg ->
