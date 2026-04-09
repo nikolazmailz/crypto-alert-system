@@ -12,8 +12,13 @@ class CacheConfig {
     @Bean
     fun priceCache() = CaffeineStampedeCache<String, BigDecimal>(
         name = "prices",
-        ttl = Duration.ofMinutes(10),
+        ttl = Duration.ofMinutes(DURATION),
         maxSize = 50_000,
+
     )
 
+
+    companion object {
+        private const val DURATION = 10L
+    }
 }

@@ -1,4 +1,6 @@
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 
 plugins {
     alias(libs.plugins.spring.boot)
@@ -38,8 +40,8 @@ openApiGenerate {
     inputSpec.set("$projectDir/src/main/resources/api/openapi.yaml")
     outputDir.set(layout.buildDirectory.dir("generated/openapi").map { it.asFile.absolutePath })
 
-    apiPackage.set("com.cryptoalert.marketdata.api")
-    modelPackage.set("com.cryptoalert.marketdata.dto")
+    apiPackage.set("com.cryptoalert.alert.api")
+    modelPackage.set("com.cryptoalert.alert.dto")
 
     configOptions.set(mapOf(
         "useSpringBoot3" to "true",
@@ -47,7 +49,9 @@ openApiGenerate {
         "useCoroutines" to "true",    // Превращает Flux/Mono в suspend и Flow
         "interfaceOnly" to "true",    // Генерируем только интерфейсы, реализацию пишем сами
         "skipDefaultInterface" to "true",
-        "enumPropertyNaming" to "UPPERCASE"
+        "enumPropertyNaming" to "UPPERCASE",
+        "useTags" to "true",            // Использовать теги для генерации имен
+        "apiNameSuffix" to "Api"        // Суффикс. Итого будет: {Tag} + {Suffix} = AlertApi
     ))
 }
 
@@ -62,3 +66,4 @@ sourceSets {
 tasks.withType<KotlinCompile>().configureEach {
     dependsOn(tasks.openApiGenerate)
 }
+

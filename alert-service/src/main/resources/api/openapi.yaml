@@ -1,0 +1,32 @@
+openapi: 3.0.3
+info:
+  title: Alert Service API
+  version: 1.0.0
+paths:
+  /api/v1/alerts:
+    post:
+      summary: Создать новый алерт на цену
+      operationId: createAlert
+      tags:
+        - Alerts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAlertRequest'
+      responses:
+        '201': { description: Алерт создан }
+
+components:
+  schemas:
+    CreateAlertRequest:
+      type: object
+      required: [userId, symbol, targetPrice, condition]
+      properties:
+        userId: { type: string, format: uuid }
+        symbol: { type: string, example: BTCUSDT }
+        targetPrice: { type: number, format: double }
+        condition:
+          type: string
+          enum: [GREATER_THAN, LESS_THAN]

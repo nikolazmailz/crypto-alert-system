@@ -55,9 +55,13 @@ class CaffeineStampedeCache<K : Any, V : Any>(
         val s = cache.synchronous().stats()
         println(
             "[$name] " +
-                "hitRate=${"%.0f".format(s.hitRate() * 100)}% " +
+                "hitRate=${"%.0f".format(s.hitRate() * HIT_RATE)}% " +
                 "hits=${s.hitCount()} " +
                 "misses=${s.missCount()}"
         )
+    }
+
+    companion object {
+        private const val HIT_RATE = 100
     }
 }
