@@ -35,6 +35,10 @@ dependencies {
     api(libs.resilience4j.kotlin)
     api(libs.resilience4j.reactor)
 
+    // jackson
+    api(libs.koltin.jackson.module)
+    api(libs.jackson.datatype.jsr310)
+
     // Swagger (OpenApi)
     api(libs.openapi)
 
