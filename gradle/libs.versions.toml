@@ -55,8 +55,6 @@ jackson_datatype_jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-dat
 
 # kafka
 spring-kafka = { module = "org.springframework.kafka:spring-kafka" }
-spring-cloud-stream = { module = "org.springframework.cloud:spring-cloud-stream" }
-spring-cloud-stream-binder-kafka = { module = "org.springframework.cloud:spring-cloud-stream-binder-kafka" }
 
 # logginh
 oshai-kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "oshai_kotlin_logging_version" }

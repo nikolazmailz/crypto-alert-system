@@ -8,55 +8,6 @@ spring:
 #    problemdetails:
 #      enabled: true
 
-  kafka:
-    bootstrap-servers: localhost:9092
-
-    cloud:
-      stream:
-        # ── Регистрация всех функций — ОБЯЗАТЕЛЬНО при нескольких бинах ──────
-        function:
-          definition: priceEvents
-
-        kafka:
-          binder:
-            brokers: localhost:9092
-            auto-create-topics: true          # dev only, отключи на prod
-            configuration:
-              security.protocol: PLAINTEXT
-#              security.protocol: SASL_SSL
-#                sasl.mechanism: PLAIN
-#                sasl.jaas.config: >
-#                  org.apache.kafka.common.security.plain.PlainLoginModule required
-#                  username="${KAFKA_USERNAME}" password="${KAFKA_PASSWORD}";
-
-          bindings:
-            priceEvents-in-0:
-              consumer:
-                configuration:
-                  max.poll.records: 50
-                  fetch.min.bytes: 1024
-                  fetch.max.wait.ms: 1000
-                  session.timeout.ms: 60000
-                  heartbeat.interval.ms: 10000
-                  max.poll.interval.ms: 300000
-                  partition.assignment.strategy: >
-                    org.apache.kafka.clients.consumer.CooperativeStickyAssignor
-                ack-mode: MANUAL_IMMEDIATE
-                enable-dlq: true
-                dlq-name: orders.DLT
-                max-attempts: 4
-                back-off-initial-interval: 1000
-                back-off-multiplier: 2.0
-                back-off-max-interval: 30000
-
-        bindings:
-          priceEvents-in-0:
-            destination: price-events
-            group: price-events-processors
-            content-type: application/json
-            consumer:
-              concurrency: 3
-
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
     enabled: true

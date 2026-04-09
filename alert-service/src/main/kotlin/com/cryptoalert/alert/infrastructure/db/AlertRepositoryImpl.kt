@@ -46,7 +46,7 @@ class AlertRepositoryImpl(
                 'targetPrice', target_price,
                 'condition', condition,
                 'isActive', is_active,
-                'createdAt', created_at,
+                'createdAt', created_at
             ) as data
             FROM alerts
             WHERE symbol = :symbol

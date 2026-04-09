@@ -1,0 +1,5 @@
+# application-test.yml
+app:
+  events:
+#    type: kafka # или 'internal'
+    type: internal # или 'kafka'

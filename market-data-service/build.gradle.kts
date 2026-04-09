@@ -7,21 +7,12 @@ plugins {
     alias(libs.plugins.openapi.generator)
 }
 
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2023.0.2")
-    }
-}
-
 dependencies {
     implementation(kotlin("reflect"))
     // Модуль зависит от общего ядра
     implementation(project(":shared-kernel"))
 
     implementation(libs.postgresql.r2dbc)
-
-    implementation(libs.spring.cloud.stream)
-    implementation(libs.spring.cloud.stream.binder.kafka)
 
     // ДОБАВЛЯЕМ подключение тестовых фикстур из ядра для наших тестов
     testImplementation(testFixtures(project(":shared-kernel")))
