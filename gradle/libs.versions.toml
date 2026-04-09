@@ -10,6 +10,9 @@ swaggerAnnotations = "2.2.20"
 jakartaValidation = "3.0.2"
 resilience4j = "2.2.0"
 
+kotlin_jackson_module_version = "2.17.2"
+jackson_version = "2.19.1"
+
 oshai_kotlin_logging_version = "5.1.0"
 openapi_version = "2.8.5"
 caffeine_version = "3.1.8"
@@ -45,6 +48,15 @@ postgresql-jdbc = { module = "org.postgresql:postgresql" }
 resilience4j-spring-boot3 = { module = "io.github.resilience4j:resilience4j-spring-boot3", version.ref = "resilience4j" }
 resilience4j-kotlin = { module = "io.github.resilience4j:resilience4j-kotlin", version.ref = "resilience4j" }
 resilience4j-reactor = { module = "io.github.resilience4j:resilience4j-reactor", version.ref = "resilience4j" }
+
+# jackson
+koltin_jackson_module = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "kotlin_jackson_module_version" }
+jackson_datatype_jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson_version" }
+
+# kafka
+spring-kafka = { module = "org.springframework.kafka:spring-kafka" }
+spring-cloud-stream = { module = "org.springframework.cloud:spring-cloud-stream" }
+spring-cloud-stream-binder-kafka = { module = "org.springframework.cloud:spring-cloud-stream-binder-kafka" }
 
 # logginh
 oshai-kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "oshai_kotlin_logging_version" }

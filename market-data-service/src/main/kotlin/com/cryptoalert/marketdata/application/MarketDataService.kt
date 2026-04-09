@@ -5,6 +5,8 @@ import com.cryptoalert.marketdata.domain.CryptoPrice
 import com.cryptoalert.marketdata.domain.CryptoPriceRepository
 import com.cryptoalert.marketdata.domain.ExchangeRateProvider
 import com.cryptoalert.shared.error.ResourceNotFoundException
+import com.cryptoalert.shared.event.PriceChangedEvent
+import com.cryptoalert.shared.event.PriceEventPublisher
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.time.OffsetDateTime
@@ -14,6 +16,7 @@ import java.time.ZoneOffset
 class MarketDataService(
     private val repository: CryptoPriceRepository,
     private val exchangeRateProvider: ExchangeRateProvider,
+    private val eventPublisher: PriceEventPublisher,
 ): PriceProvider {
 
     // Метод для сохранения/обновления цен (понадобится нам позже)
@@ -33,6 +36,7 @@ class MarketDataService(
                     price = livePrice,
                     updatedAt = OffsetDateTime.now(ZoneOffset.UTC)
                 )
+                eventPublisher.publish(PriceChangedEvent(symbol, newPrice.price))
                 repository.save(newPrice)
             } ?: throw ResourceNotFoundException("Crypto pair $symbol not found")
     }
