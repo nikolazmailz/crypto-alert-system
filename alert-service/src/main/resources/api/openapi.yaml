@@ -16,7 +16,30 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateAlertRequest'
       responses:
-        '201': { description: Алерт создан }
+        '201':
+          description: Алерт создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertResponse'
+  /api/v1/alerts/{id}:
+    delete:
+      summary: Деактивировать алерт
+      operationId: deactivateAlert
+      tags:
+        - Alerts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Алерт деактивирован
+        '404':
+          description: Алерт не найден
 
 components:
   schemas:
@@ -24,9 +47,38 @@ components:
       type: object
       required: [userId, symbol, targetPrice, condition]
       properties:
-        userId: { type: string, format: uuid }
-        symbol: { type: string, example: BTCUSDT }
-        targetPrice: { type: number, format: double }
+        userId:
+          type: string
+          format: uuid
+        symbol:
+          type: string
+          example: BTCUSDT
+        targetPrice:
+          type: number
+          format: double
         condition:
           type: string
           enum: [GREATER_THAN, LESS_THAN]
+    AlertResponse:
+      type: object
+      required: [id, userId, symbol, targetPrice, condition, isActive, createdAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        symbol:
+          type: string
+        targetPrice:
+          type: number
+          format: double
+        condition:
+          type: string
+          enum: [GREATER_THAN, LESS_THAN]
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time

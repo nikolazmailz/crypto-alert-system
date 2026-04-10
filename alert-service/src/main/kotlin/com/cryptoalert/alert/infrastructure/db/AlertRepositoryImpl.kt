@@ -15,15 +15,17 @@ import java.util.UUID
 @Repository
 class AlertRepositoryImpl(
     private val databaseClient: DatabaseClient,
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
 ) : AlertRepository {
 
     override suspend fun save(alert: Alert): UUID {
-        return databaseClient.sql("""
+        return databaseClient.sql(
+            """
             INSERT INTO alerts (id, user_id, symbol, target_price, condition, is_active, created_at)
             VALUES (:id, :userId, :symbol, :targetPrice, :condition, :isActive, :createdAt)
             RETURNING id
-        """)
+            """.trimIndent(),
+        )
             .bind("id", alert.id)
             .bind("userId", alert.userId)
             .bind("symbol", alert.symbol)
@@ -37,38 +39,69 @@ class AlertRepositoryImpl(
             .awaitSingle()
     }
 
-    override suspend fun findTriggeredAlerts(symbol: String, currentPrice: BigDecimal): List<Alert> {
-        return databaseClient.sql("""
-            select jsonb_build_object(
-                'id', id,
-                'userId', user_id,
-                'symbol', symbol,
+    override suspend fun findById(id: UUID): Alert? {
+        return databaseClient.sql(
+            """
+            SELECT jsonb_build_object(
+                'id',          id,
+                'userId',      user_id,
+                'symbol',      symbol,
                 'targetPrice', target_price,
-                'condition', condition,
-                'isActive', is_active,
-                'createdAt', created_at
-            ) as data
+                'condition',   condition,
+                'isActive',    is_active,
+                'createdAt',   created_at
+            ) AS data
+            FROM alerts
+            WHERE id = :id
+            """.trimIndent(),
+        )
+            .bind("id", id)
+            .fetch()
+            .one()
+            .map { row -> objectMapper.readValue<Alert>((row["data"] as Json).asString()) }
+            .awaitSingleOrNull()
+    }
+
+    override suspend fun findTriggeredAlerts(symbol: String, currentPrice: BigDecimal): List<Alert> {
+        return databaseClient.sql(
+            """
+            SELECT jsonb_build_object(
+                'id',          id,
+                'userId',      user_id,
+                'symbol',      symbol,
+                'targetPrice', target_price,
+                'condition',   condition,
+                'isActive',    is_active,
+                'createdAt',   created_at
+            ) AS data
             FROM alerts
             WHERE symbol = :symbol
               AND is_active = true
               AND (
-                (condition = 'GREATER_THAN' AND :currentPrice >= target_price)
-                OR
-                (condition = 'LESS_THAN' AND :currentPrice <= target_price)
-              )
-        """)
+                    (condition = 'GREATER_THAN' AND :currentPrice >= target_price)
+                    OR
+                    (condition = 'LESS_THAN'    AND :currentPrice <= target_price)
+                  )
+            """.trimIndent(),
+        )
             .bind("symbol", symbol)
             .bind("currentPrice", currentPrice)
             .fetch()
             .all()
-            .map {
-                objectMapper.readValue<Alert>((it["data"] as Json).asString())
-            }
+            .map { row -> objectMapper.readValue<Alert>((row["data"] as Json).asString()) }
             .collectList()
             .awaitSingleOrNull() ?: emptyList()
     }
 
     override suspend fun markAsSent(id: UUID) {
+        databaseClient.sql("UPDATE alerts SET is_active = false WHERE id = :id")
+            .bind("id", id)
+            .fetch()
+            .rowsUpdated()
+            .awaitSingle()
+    }
+
+    override suspend fun deactivate(id: UUID) {
         databaseClient.sql("UPDATE alerts SET is_active = false WHERE id = :id")
             .bind("id", id)
             .fetch()
