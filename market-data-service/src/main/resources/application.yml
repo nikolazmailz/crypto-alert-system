@@ -10,43 +10,6 @@ spring:
 
   kafka:
     bootstrap-servers: localhost:9092
-    cloud:
-      stream:
-        kafka:
-          binder:
-            brokers: localhost:9092
-            auto-create-topics: true          # dev only, отключи на prod
-            configuration:
-              security.protocol: PLAINTEXT
-#              security.protocol: SASL_SSL
-#                sasl.mechanism: PLAIN
-#                sasl.jaas.config: >
-#                  org.apache.kafka.common.security.plain.PlainLoginModule required
-#                  username="${KAFKA_USERNAME}" password="${KAFKA_PASSWORD}";
-
-          bindings:
-            price-events-out-0:
-              producer:
-                configuration:
-                  acks: all
-                  enable.idempotence: true
-                  max.in.flight.requests.per.connection: 1
-                  delivery.timeout.ms: 120000
-                  request.timeout.ms: 10000
-                  retry.backoff.ms: 200
-                  linger.ms: 5
-                  batch.size: 65536
-                  buffer.memory: 67108864
-                  compression.type: lz4
-
-        bindings:
-          # StreamBridge producers
-          price-events-out-0:
-            destination: price-events
-            content-type: application/json
-            producer:
-              partition-count: 3
-              partition-key-expression: headers['kafka_messageKey']
 
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml # Путь к вашему главному файлу

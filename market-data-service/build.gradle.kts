@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":shared-kernel"))
 
     implementation(libs.postgresql.r2dbc)
+    implementation("org.springframework.kafka:spring-kafka")
 
     // ДОБАВЛЯЕМ подключение тестовых фикстур из ядра для наших тестов
     testImplementation(testFixtures(project(":shared-kernel")))
