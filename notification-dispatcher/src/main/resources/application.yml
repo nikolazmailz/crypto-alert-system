@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: notification-dispatcher
+
+  # ── SMTP (Email) ──────────────────────────────────────────────────────────────
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:noreply@crypto-alert.example.com}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+        debug: false
+
+  # ── Kafka ─────────────────────────────────────────────────────────────────────
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+# ── Event transport ─────────────────────────────────────────────────────────────
+# Mirrors the setting in alert-service.
+# internal → Spring ApplicationEventPublisher (single JVM / modular monolith)
+# kafka    → Kafka topic "notification-events"  (distributed deployment)
+app:
+  events:
+#    type: kafka
+    type: internal
+
+# ── Channel feature toggles ─────────────────────────────────────────────────────
+# Each channel is OFF by default; enable in environment-specific config or via
+# env vars. When a channel is disabled its Spring bean is not created at all,
+# so no SMTP or Telegram connection is attempted.
+notification:
+  channels:
+    email:
+      enabled: ${NOTIFICATION_EMAIL_ENABLED:false}
+    telegram:
+      enabled: ${NOTIFICATION_TELEGRAM_ENABLED:false}
+
+# ── Telegram Bot API ─────────────────────────────────────────────────────────────
+# Required only when notification.channels.telegram.enabled = true.
+# Supply via env var to avoid committing secrets.
+telegram:
+  bot:
+    token: ${TELEGRAM_BOT_TOKEN:}

@@ -1,5 +1,7 @@
 package com.cryptoalert.alert.application
 
+import com.cryptoalert.alert.application.notification.toNotificationRequestedEvent
+import com.cryptoalert.alert.application.notification.NotificationEventPublisher
 import com.cryptoalert.alert.domain.Alert
 import com.cryptoalert.alert.domain.AlertCondition
 import com.cryptoalert.alert.domain.AlertRepository
@@ -12,7 +14,7 @@ import java.util.UUID
 @Service
 class AlertService(
     private val alertRepository: AlertRepository,
-//    private val notificationService: NotificationService
+    private val notificationEventPublisher: NotificationEventPublisher,
 ) {
     private val log = KotlinLogging.logger {}
 
@@ -48,13 +50,13 @@ class AlertService(
     }
 
     suspend fun processPriceChange(symbol: String, price: BigDecimal) {
-        log.info { "processPriceChange: symbol is $symbol at price $price" }
+        log.info { "processPriceChange: symbol=$symbol at price=$price" }
 
         val triggeredAlerts = alertRepository.findTriggeredAlerts(symbol, price)
 
         triggeredAlerts.forEach { alert ->
-            log.info { "ALERT TRIGGERED: User ${alert.userId} for $symbol at price $price" }
-//            notificationService.send(alert, price)
+            log.info { "ALERT TRIGGERED: userId=${alert.userId} for $symbol at price=$price" }
+            notificationEventPublisher.publish(alert.toNotificationRequestedEvent(price))
             alertRepository.markAsSent(alert.id)
         }
     }

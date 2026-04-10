@@ -14,6 +14,22 @@ spring:
     password: ${spring.datasource.password}
     url: ${spring.datasource.url}
 
+# ── Channel feature toggles (mirrored from notification-dispatcher) ───────────
+# Enable whichever channel you have credentials for.
+# EmailNotificationSender / TelegramNotificationSender are only instantiated
+# when the corresponding flag is true, so misconfigured senders won't start.
+notification:
+  channels:
+    email:
+      enabled: ${NOTIFICATION_EMAIL_ENABLED:false}
+    telegram:
+      enabled: ${NOTIFICATION_TELEGRAM_ENABLED:false}
+
+# ── Telegram Bot API ─────────────────────────────────────────────────────────
+telegram:
+  bot:
+    token: ${TELEGRAM_BOT_TOKEN:}
+
 #springdoc:
 #  swagger-ui:
 #    disable-swagger-default-url: true

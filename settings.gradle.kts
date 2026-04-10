@@ -5,4 +5,4 @@ include("market-data-service")
 include("portfolio-manager-service")
 include("alert-service")
 
-//include("notification-dispatcher")
+include("notification-dispatcher")

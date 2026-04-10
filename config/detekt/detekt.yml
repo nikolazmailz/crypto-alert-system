@@ -51,6 +51,8 @@ style:
     ignoreNumbers: ['-1', '0', '1', '2']
   UnusedPrivateMember:
     active: true
+  ForbiddenComment:
+    active: false
 
 potential-bugs:
   active: true
@@ -61,3 +63,4 @@ performance:
   active: true
   SpreadOperator:
     active: false
+
