@@ -31,6 +31,22 @@ paths:
         '404':
           description: Валютная пара не найдена
 
+  /symbols:
+    get:
+      summary: Получить список доступных торговых пар
+      operationId: getSymbols
+      tags:
+        - Symbols
+      responses:
+        '200':
+          description: Список активных торговых пар
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SymbolResponse'
+
 components:
   schemas:
     PriceResponse:
@@ -50,3 +66,24 @@ components:
         updatedAt:
           type: string
           format: date-time
+
+    SymbolResponse:
+      type: object
+      required:
+        - symbol
+        - baseAsset
+        - quoteAsset
+        - status
+      properties:
+        symbol:
+          type: string
+          example: "BTCUSDT"
+        baseAsset:
+          type: string
+          example: "BTC"
+        quoteAsset:
+          type: string
+          example: "USDT"
+        status:
+          type: string
+          example: "TRADING"
