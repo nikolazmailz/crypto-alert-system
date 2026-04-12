@@ -1,0 +1,25 @@
+spring:
+  webflux:
+    problemdetails:
+      enabled: true
+
+#  r2dbc:
+#    url: r2dbc:postgresql://localhost:5432/crypto_alert
+#    username: postgres
+#    password: postgres
+#
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml # Путь к вашему главному файлу
+    enabled: true
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    url: ${spring.datasource.url}
+
+jwt:
+  # Секрет должен быть >= 32 символов (256 бит) для HMAC-SHA256.
+  # В проде задавать через переменную окружения: JWT_SECRET
+  secret: "${JWT_SECRET:crypto-alert-system-dev-secret-key-min-32-chars}"
+  expiration-ms: 3600000  # 1 час
+
+server:
+  port: 8083

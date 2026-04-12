@@ -15,7 +15,16 @@ dependencies {
     implementation(project(":shared-kernel"))
 
     implementation(libs.postgresql.r2dbc)
-    implementation("org.springframework.kafka:spring-kafka")
+    implementation(libs.spring.kafka)
+
+    // JWT-безопасность: spring-security + jjwt.
+    // JwtSecurityAutoConfiguration из shared-kernel автоматически создаст
+    // JwtSecurityService, JwtReactiveAuthenticationManager, JwtSecurityContextRepository
+    // при наличии этих зависимостей и jwt.secret в application.yml.
+    implementation(libs.spring.boot.starter.security)
+    implementation(libs.jjwt.api)
+    runtimeOnly(libs.jjwt.impl)
+    runtimeOnly(libs.jjwt.jackson)
 
     // ДОБАВЛЯЕМ подключение тестовых фикстур из ядра для наших тестов
     testImplementation(testFixtures(project(":shared-kernel")))

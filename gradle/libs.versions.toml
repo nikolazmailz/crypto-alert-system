@@ -24,6 +24,8 @@ testcontainers = "1.19.7"
 wiremock = "3.3.1"
 
 archunit_version = "1.4.1"
+jjwt = "0.12.6"
+mockk = "1.13.12"
 
 [libraries]
 # coroutines
@@ -74,6 +76,18 @@ testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" }
 wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremock" }
 archunit = { module = "com.tngtech.archunit:archunit", version.ref = "archunit_version" }
+
+# Security
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
+spring-security-test = { module = "org.springframework.security:spring-security-test" }
+
+# JWT
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
+
+# MockK
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

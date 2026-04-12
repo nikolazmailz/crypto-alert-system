@@ -45,6 +45,19 @@ dependencies {
     // Caffeine
     api(libs.caffeine)
 
+    // JJWT — compileOnly. Нужен для компиляции JwtSecurityService.
+    // Сервисы, которым нужна JWT-валидация, добавляют jjwt-impl и jjwt-jackson сами.
+    compileOnly(libs.jjwt.api)
+
+    // Spring Security — compileOnly, НЕ api/implementation.
+    // Нужен только для компиляции SecurityContextUtils.kt.
+    // Не должен попадать в transitive-зависимости других модулей:
+    // market-data-service, alert-service и т.д. НЕ должны получать
+    // spring-security на classpath автоматически, иначе Spring Boot
+    // AutoConfiguration активирует защиту на ВСЕХ эндпоинтах.
+    // Каждый сервис, которому нужна security, добавляет её ЯВНО сам.
+    compileOnly(libs.spring.boot.starter.security)
+
     // Test dependencies
     testFixturesApi(libs.spring.boot.starter.test)
     testFixturesApi(libs.testcontainers.postgresql)

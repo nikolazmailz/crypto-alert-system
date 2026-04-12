@@ -42,6 +42,7 @@ class AlertControllerIntegrationTest(
 
                 val response = webTestClient.post()
                     .uri("/api/v1/alerts")
+                    .header("Authorization", bearerToken(userId))
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(request)
                     .exchange()
@@ -69,6 +70,7 @@ class AlertControllerIntegrationTest(
 
                 val response = webTestClient.post()
                     .uri("/api/v1/alerts")
+                    .header("Authorization", bearerToken(userId))
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(request)
                     .exchange()
@@ -96,6 +98,7 @@ class AlertControllerIntegrationTest(
 
                 webTestClient.delete()
                     .uri("/api/v1/alerts/$alertId")
+                    .header("Authorization", bearerToken(UUID.randomUUID()))
                     .exchange()
                     .expectStatus().isNoContent
 
@@ -108,6 +111,7 @@ class AlertControllerIntegrationTest(
 
                 webTestClient.delete()
                     .uri("/api/v1/alerts/$nonExistentId")
+                    .header("Authorization", bearerToken(UUID.randomUUID()))
                     .exchange()
                     .expectStatus().isNotFound
             }
@@ -121,6 +125,7 @@ class AlertControllerIntegrationTest(
                 // Шаг 1: Создать алерт через API
                 val created = webTestClient.post()
                     .uri("/api/v1/alerts")
+                    .header("Authorization", bearerToken(userId))
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(
                         CreateAlertRequest(
@@ -142,6 +147,7 @@ class AlertControllerIntegrationTest(
                 // Шаг 3: Деактивировать алерт через API
                 webTestClient.delete()
                     .uri("/api/v1/alerts/${created.id}")
+                    .header("Authorization", bearerToken(userId))
                     .exchange()
                     .expectStatus().isNoContent
 
@@ -153,8 +159,12 @@ class AlertControllerIntegrationTest(
                 val userId1 = UUID.randomUUID()
                 val userId2 = UUID.randomUUID()
 
+                print("userId1 $userId1")
+                print("userId2 $userId2")
+
                 val alert1 = webTestClient.post()
                     .uri("/api/v1/alerts")
+                    .header("Authorization", bearerToken(userId1))
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(
                         CreateAlertRequest(
@@ -172,6 +182,7 @@ class AlertControllerIntegrationTest(
 
                 val alert2 = webTestClient.post()
                     .uri("/api/v1/alerts")
+                    .header("Authorization", bearerToken(userId2))
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(
                         CreateAlertRequest(
@@ -190,6 +201,7 @@ class AlertControllerIntegrationTest(
                 // Деактивируем только первый
                 webTestClient.delete()
                     .uri("/api/v1/alerts/${alert1.id}")
+                    .header("Authorization", bearerToken(userId1))
                     .exchange()
                     .expectStatus().isNoContent
 

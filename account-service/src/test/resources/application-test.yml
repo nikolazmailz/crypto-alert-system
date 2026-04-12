@@ -1,0 +1,8 @@
+jwt:
+  secret: "test-secret-key-for-integration-tests-must-be-at-least-32-chars"
+  expiration-ms: 3600000
+
+spring:
+  webflux:
+    problemdetails:
+      enabled: true

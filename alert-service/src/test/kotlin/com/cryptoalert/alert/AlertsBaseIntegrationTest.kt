@@ -2,6 +2,7 @@ package com.cryptoalert.alert
 
 import com.cryptoalert.BaseIntegrationTest
 import com.cryptoalert.alert.domain.AlertCondition
+import com.cryptoalert.shared.security.JwtTokenService
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,6 +21,9 @@ abstract class AlertsBaseIntegrationTest : BaseIntegrationTest() {
 
     @Autowired
     lateinit var databaseClient: DatabaseClient
+
+    @Autowired
+    lateinit var tokenService: JwtTokenService
 
     suspend fun deleteAllAlerts() {
         databaseClient.sql("DELETE FROM alerts")
@@ -60,4 +64,7 @@ abstract class AlertsBaseIntegrationTest : BaseIntegrationTest() {
             .one()
             .map { it["is_active"] as Boolean }
             .awaitSingleOrNull()
+
+    /** Генерирует валидный Bearer-токен для указанного userId (для тестов). */
+    fun bearerToken(userId: UUID): String = "Bearer ${tokenService.generateToken(userId)}"
 }

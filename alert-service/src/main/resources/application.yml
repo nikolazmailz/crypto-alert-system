@@ -1,3 +1,8 @@
+jwt:
+  # Должен совпадать с jwt.secret в account-service!
+  # В проде задавать через переменную окружения JWT_SECRET (одна для всех сервисов).
+  secret: "${JWT_SECRET:crypto-alert-system-dev-secret-key-min-32-chars}"
+
 app:
   events:
 #    type: kafka # или 'internal'
