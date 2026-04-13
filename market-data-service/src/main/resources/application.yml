@@ -1,9 +1,15 @@
+server:
+  port: 8080
+
 app:
   events:
 #    type: kafka # или 'internal'
     type: internal # или 'kafka'
 
 spring:
+  application:
+    name: market-data-service
+
   webflux:
     problemdetails:
       enabled: true
@@ -76,3 +82,24 @@ resilience4j:
 binance:
   api:
     url: "https://api.binance.com"
+
+# ── Actuator & Prometheus ─────────────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      environment: "${APP_ENV:dev}"
+    distribution:
+      percentiles-histogram:
+        crypto.price.update.latency: true
+        http.server.requests: true
+        # Resilience4j circuit-breaker вызовы — тоже гистограмма
+        resilience4j.circuitbreaker.calls: true

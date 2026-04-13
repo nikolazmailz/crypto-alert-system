@@ -38,7 +38,11 @@ class SecurityConfig(
                 exchanges
                     .pathMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
                     .pathMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                    .pathMatchers("/actuator/health").permitAll()
+                    // Весь /actuator/** открыт без аутентификации.
+                    // В продакшне рекомендуется ограничить доступ на уровне
+                    // сетевого периметра (nginx / Kubernetes NetworkPolicy),
+                    // разрешив обращение только от Prometheus-скрейпера.
+                    .pathMatchers("/actuator/**").permitAll()
                     .anyExchange().authenticated()
             }
             .build()

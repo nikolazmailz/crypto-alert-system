@@ -35,7 +35,9 @@ class SecurityConfig(
             .securityContextRepository(securityContextRepository)
             .authorizeExchange { exchanges ->
                 exchanges
-                    .pathMatchers("/actuator/health").permitAll()
+                    // Весь /actuator/** открыт для Prometheus-скрейпера.
+                    // В проде ограничить доступ на уровне сети (nginx / K8s NetworkPolicy).
+                    .pathMatchers("/actuator/**").permitAll()
                     .anyExchange().authenticated() // все alert-эндпоинты требуют JWT
             }
             .build()

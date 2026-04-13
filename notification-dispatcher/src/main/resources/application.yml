@@ -1,3 +1,6 @@
+server:
+  port: 8082
+
 spring:
   application:
     name: notification-dispatcher
@@ -47,3 +50,22 @@ notification:
 telegram:
   bot:
     token: ${TELEGRAM_BOT_TOKEN:}
+
+# ── Actuator & Prometheus ─────────────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      environment: "${APP_ENV:dev}"
+    distribution:
+      percentiles-histogram:
+        crypto.notification.sent: true
+        http.server.requests: true

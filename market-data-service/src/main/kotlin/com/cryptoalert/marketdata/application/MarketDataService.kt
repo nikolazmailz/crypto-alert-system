@@ -7,42 +7,81 @@ import com.cryptoalert.marketdata.domain.ExchangeRateProvider
 import com.cryptoalert.shared.error.ResourceNotFoundException
 import com.cryptoalert.shared.event.PriceChangedEvent
 import com.cryptoalert.shared.event.PriceEventPublisher
+import com.cryptoalert.shared.observability.observeSuspend
+import io.micrometer.observation.Observation
+import io.micrometer.observation.ObservationRegistry
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 
+/**
+ * Application-слой для market-data.
+ *
+ * Инструментация latency обновления цены:
+ *  Observation [METRIC_PRICE_UPDATE_LATENCY] охватывает весь путь «внешний API →
+ *  запись в БД → публикация события» и записывает время этой операции.
+ *
+ *  Prometheus-метрика: `crypto_price_update_latency_seconds_{count,sum,max,bucket}`
+ *  с тегом `symbol`. Гистограмма включена в application.yml (percentiles-histogram).
+ *
+ *  Кэш-хит (данные уже есть в БД) не инструментируется — это fast path,
+ *  и его latency не интересна с точки зрения бизнеса.
+ */
 @Service
 class MarketDataService(
     private val repository: CryptoPriceRepository,
     private val exchangeRateProvider: ExchangeRateProvider,
     private val eventPublisher: PriceEventPublisher,
-): PriceProvider {
+    private val observationRegistry: ObservationRegistry,
+) : PriceProvider {
 
-    // Метод для сохранения/обновления цен (понадобится нам позже)
-    suspend fun savePrice(cryptoPrice: CryptoPrice): CryptoPrice {
-        return repository.save(cryptoPrice)
-    }
+    suspend fun savePrice(cryptoPrice: CryptoPrice): CryptoPrice =
+        repository.save(cryptoPrice)
 
     suspend fun getPrice(symbol: String): CryptoPrice {
         val normalizedSymbol = symbol.uppercase()
 
-        // Пытаемся найти в БД, если нет — идем во внешний провайдер через элвис-оператор
+        // Кэш-хит: возвращаем из БД без внешнего запроса и инструментации.
         return repository.findById(normalizedSymbol)
-            ?: exchangeRateProvider.fetchPrice(normalizedSymbol)?.let { livePrice ->
-                // Если получили цену извне — создаем объект, сохраняем и возвращаем его
-                val newPrice = CryptoPrice(
-                    symbol = normalizedSymbol,
-                    price = livePrice,
-                    updatedAt = OffsetDateTime.now(ZoneOffset.UTC)
-                )
-                eventPublisher.publish(PriceChangedEvent(symbol, newPrice.price))
-                repository.save(newPrice)
-            } ?: throw ResourceNotFoundException("Crypto pair $symbol not found")
+            ?: fetchFromExchangeAndPublish(normalizedSymbol)
     }
 
-    override suspend fun getCurrentPrice(symbol: String): BigDecimal {
-        // Вызываем уже написанную нами логику (с кэшем и Binance)
-        return getPrice(symbol).price
+    /**
+     * Вызывается только при cache-miss: идёт во внешний API, сохраняет и
+     * публикует событие. Именно этот путь инструментируется как "latency
+     * обработки обновления цены" согласно требованиям.
+     */
+    private suspend fun fetchFromExchangeAndPublish(symbol: String): CryptoPrice =
+        Observation.createNotStarted(METRIC_PRICE_UPDATE_LATENCY, observationRegistry)
+            // symbol — low cardinality: конечный набор торговых пар (BTCUSDT, ETHUSDT…)
+            .lowCardinalityKeyValue("symbol", symbol)
+            .observeSuspend {
+                val livePrice = exchangeRateProvider.fetchPrice(symbol)
+                    ?: throw ResourceNotFoundException("Crypto pair $symbol not found")
+
+                val newPrice = CryptoPrice(
+                    symbol = symbol,
+                    price = livePrice,
+                    updatedAt = OffsetDateTime.now(ZoneOffset.UTC),
+                )
+                // Публикация события — внутри Observation, чтобы задержка
+                // распространения события тоже учитывалась в метрике.
+                eventPublisher.publish(PriceChangedEvent(symbol, newPrice.price))
+                repository.save(newPrice)
+            }
+
+    override suspend fun getCurrentPrice(symbol: String): BigDecimal =
+        getPrice(symbol).price
+
+    companion object {
+        /**
+         * Имя Observation → Prometheus-метрики:
+         *   `crypto_price_update_latency_seconds_bucket` (гистограмма для p50/p95/p99)
+         *   `crypto_price_update_latency_seconds_count`  (количество обновлений)
+         *   `crypto_price_update_latency_seconds_sum`    (суммарное время)
+         *   `crypto_price_update_latency_seconds_max`    (максимальное время, 2-мин окно)
+         */
+        private const val METRIC_PRICE_UPDATE_LATENCY = "crypto.price.update.latency"
     }
 }

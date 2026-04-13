@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: account-service
   webflux:
     problemdetails:
       enabled: true
@@ -23,3 +25,23 @@ jwt:
 
 server:
   port: 8083
+
+# ── Actuator & Prometheus ─────────────────────────────────────────────────────
+# Примечание: /actuator/prometheus защищён в SecurityConfig — доступ без JWT
+# разрешён только для внутренней сети (Prometheus-скрейпер).
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      environment: "${APP_ENV:dev}"
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true

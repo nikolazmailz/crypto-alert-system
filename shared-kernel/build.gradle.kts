@@ -45,6 +45,17 @@ dependencies {
     // Caffeine
     api(libs.caffeine)
 
+    // ── Monitoring & Observability ────────────────────────────────────────────
+    // api(), а не implementation — чтобы все зависимые модули получали их
+    // транзитивно и не дублировали объявления в своих build.gradle.kts.
+    api(libs.spring.boot.starter.actuator)
+    api(libs.micrometer.registry.prometheus)
+    // Мост к OpenTelemetry — нужен для будущей интеграции с OTel-коллектором.
+    // Без реального экспортёра трейсы просто отбрасываются, ошибок нет.
+    api(libs.micrometer.tracing.bridge.otel)
+    // Kotlin-расширения Micrometer (observeSuspend и др.)
+    api(libs.micrometer.kotlin)
+
     // JJWT — compileOnly. Нужен для компиляции JwtSecurityService.
     // Сервисы, которым нужна JWT-валидация, добавляют jjwt-impl и jjwt-jackson сами.
     compileOnly(libs.jjwt.api)

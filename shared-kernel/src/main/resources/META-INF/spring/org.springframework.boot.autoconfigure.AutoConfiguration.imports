@@ -1,1 +1,2 @@
 com.cryptoalert.shared.security.JwtSecurityAutoConfiguration
+com.cryptoalert.shared.observability.MetricsAutoConfiguration

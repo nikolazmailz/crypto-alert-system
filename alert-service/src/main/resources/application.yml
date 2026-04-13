@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 jwt:
   # Должен совпадать с jwt.secret в account-service!
   # В проде задавать через переменную окружения JWT_SECRET (одна для всех сервисов).
@@ -9,6 +12,9 @@ app:
     type: internal # или 'kafka'
 
 spring:
+  application:
+    name: alert-service
+
   kafka:
     bootstrap-servers: localhost:9092
 
@@ -34,6 +40,30 @@ notification:
 telegram:
   bot:
     token: ${TELEGRAM_BOT_TOKEN:}
+
+# ── Actuator & Prometheus ─────────────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        # Открываем health (liveness/readiness) и prometheus-скрейпинг.
+        # info и metrics — для удобства отладки в dev.
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      # Дополнительный тег для Prometheus-алертинга по среде.
+      environment: "${APP_ENV:dev}"
+    distribution:
+      # Гистограммы для p50/p95/p99 в Grafana.
+      percentiles-histogram:
+        crypto.alert.triggered: true
+        crypto.price.update.latency: true
+        http.server.requests: true
 
 #springdoc:
 #  swagger-ui:
