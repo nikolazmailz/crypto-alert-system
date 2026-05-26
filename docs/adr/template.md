@@ -1,6 +1,6 @@
 # [ADR-000] Короткий заголовок решения
 
-**Status:** [Proposed | Accepted | Deprecated | Superseded]
+**Status:** [Proposed | Accepted | Deprecated | Superseded | Rejected]
 **Date:** YYYY-MM-DD
 **Author:** ...
 
